@@ -27,3 +27,6 @@ order_amount= float(input("Enter the order amount: "))
 
 accept_order= order_amount>0
 print(f"{store_name} order accepted: {accept_order}")
+
+#Q. 12 — MCQ: Comparison Result
+# Answer : True
