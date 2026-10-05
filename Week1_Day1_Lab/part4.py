@@ -29,3 +29,6 @@ IndentationError: unexpected indent
 '''
 amount = 125
 print(amount)
+
+# Q. 16 — MCQ: Debugging
+# Answer: C
