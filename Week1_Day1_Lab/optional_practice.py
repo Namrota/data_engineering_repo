@@ -17,3 +17,11 @@ final_total= subtotal - discount_amount
 
 # Display the order summary:
 print(f"{order_id} - {city} | Subtotal: €{subtotal:.2f} | Discount: €{discount_amount:.2f} | Final Total: €{final_total:.2f}")
+
+# Q. 18 — Create Validation Flags
+
+valid_quantity= quantity > 0
+valid_discount= 0 <= discount_percent <=100
+all_valid= valid_quantity and valid_discount
+
+print(f"Valid Quantity: {valid_quantity}, Valid Discount: {valid_discount}, All Valid: {all_valid}")
