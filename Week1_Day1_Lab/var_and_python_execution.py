@@ -1,3 +1,8 @@
+'''
+Uncomment the sections you want to execute and run the code to see the output.
+
+'''
+
 #Q.1: Create an Order Summary
 # order_id = 1001
 # city = "London"
@@ -17,5 +22,8 @@
 # print(f"Order {order_id} from {city} has value €{amount_eur:.2f}")
 
 #Q.3 — Fix the Execution Order
-store_name = "Bristol"
-print(f"Store: {store_name}")
+# store_name = "Bristol"
+# print(f"Store: {store_name}")
+
+# Q. 4 — MCQ: Variables
+# Answer: B
