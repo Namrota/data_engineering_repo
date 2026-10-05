@@ -9,6 +9,10 @@
 
 order_id = 1002
 city = "Manchester"
-amount_gbp = 18.00
+amount_eur = 18.00
 is_complete = False
-print(f"Order {order_id} from {city} has value €{amount_gbp}")
+print(f"Order {order_id} from {city} has value €{amount_eur}")
+
+amount_eur= 23.75
+print(f"Order {order_id} from {city} has value €{amount_eur:.2f}")
+
