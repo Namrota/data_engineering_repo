@@ -30,3 +30,6 @@ price= float(price_text)
 # Calculating the total:
 total= quantity * price
 print(f"Total: €{total:.2f}")
+
+# Q. 8 — MCQ: Type Casting
+#Answer: D
