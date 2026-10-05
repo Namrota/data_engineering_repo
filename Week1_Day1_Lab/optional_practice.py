@@ -25,3 +25,10 @@ valid_discount= 0 <= discount_percent <=100
 all_valid= valid_quantity and valid_discount
 
 print(f"Valid Quantity: {valid_quantity}, Valid Discount: {valid_discount}, All Valid: {all_valid}")
+
+# Q. 19 — Debug an Input and Comparison Script
+city = input("City: ")
+# the value of amount needs to be typecasted from str to flaot to allow for comparison operator to work
+amount = float(input("Amount: ")) 
+is_high_value = amount >= 100
+print(f"{city} | £{amount:.2f} | High value: {is_high_value}")
