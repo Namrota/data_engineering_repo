@@ -1,0 +1,173 @@
+Part 1 — Data Engineering and Source Systems
+
+Q. 1 — Build a Source Inventory
+- MySQL order database
+- CSV product file from a supplier
+- JSON events from the website
+- Excel stock report from a store
+
+Solution:
+Source: MySQL order database | Type of data: Structured      | How often may it change: frequently                                      | One check before using it: number of added rows, data quality
+Source: Supplier CSV         | Type of data: Structured      | How often may it change: when Supplier adds new product                  | One check before using it: data validation
+Source: Website JSON         | Type of data: Semi-Structured | How often may it change: frequntly                                       | One check before using it: verifying expected data
+Source: Excel Stock Report   | Type of data: Structured      | How often may it change: when new stock get added, or daily as required  | One check before using it: data validation
+
+Q. 2 — Decide What the Data Engineer Must Do
+For each requirement, mark whether it is mainly a data engineering, data analytics, or data science task.
+A. Build a daily process that copies orders into analytical storage.    -> Data Analytics
+B. Create a chart showing sales by city.                                -> Data Analytics
+C. Train a model to predict customer churn.                             -> Data Scientist
+D. Remove duplicate order records before reporting.                     -> Data Analyst ?
+E. Make sure a failed pipeline can be rerun safely.                     -> Data Engineer
+
+
+Q. 4 — MCQ: Data Engineering
+Which task is most clearly a data-engineering responsibility?
+Solution: B. Building a reliable process that moves and cleans order data
+
+Part 2 — Pipeline Lifecycle: Ingestion, Storage, Processing, and Serving
+A data pipeline normally moves through a sequence such as source → ingestion → storage → processing → useful output. 
+Monitoring checks whether those steps are working as expected.
+
+Q. 5 — Put the Pipeline Steps in Order
+Put these steps in a sensible order:
+Create daily sales summary
+Read new order records
+Store the received records
+Check that the run completed
+Make the summary available to analysts
+Clean invalid values
+
+Solution:
+Read new order records
+Store the received records
+Clean invalid values
+Create daily sales summary
+Make the summary available to analysts
+Check that the run completed
+
+Q. 6 — Design a Small Pipeline for Daily Orders
+BritMart receives one CSV file every night.
+
+Complete this design:
+
+Pipeline step	                                        What happens?	                                    Simple check
+_______________________________________________________________________________________________________________________________________________
+Source	                                        Supplier sends order file	                            File exists in the source location
+Ingestion                                       Extracting the file from the source                     Required columns are available 		
+Storage                                         Storing the	ingested file                               Verify if all the rows are stored
+Processing		                                Cleaning the stored file                                Data validation        
+Serving		                                    Create useful summaries                                 Verify that the derived columns or the summary are calculated correctly
+Monitoring		                                Verify if all the steps are running                     Check logs, verify the status
+
+
+Q. 8 — MCQ: Ingestion
+What does ingestion mean in a data pipeline?
+Solution: A. Moving data from a source into the data platform
+
+Part 3 — Transformation, Batch Processing, and Streaming Processing
+Transformation changes raw data into a more useful form. Batch processing handles a collected set of records together. 
+Streaming processing handles continuously arriving events with low delay.
+
+
+Q. 10 — Batch or Streaming?
+Choose batch or streaming for each requirement.
+
+Requirement	                                                Choice	                                        Reason
+___________________________________________________________________________________________________________________________________________
+Daily supplier file at midnight		                        batch                                         File is generated periodically  
+Payment events needed within seconds		                streaming                                     Events without delay  
+Monthly finance report		                                batch                                         Report is generated monthly  
+Live website activity feed		                            streaming                                     Live events stored continuously
+
+Q. 12 — MCQ: Streaming
+Which requirement is the strongest reason to use streaming rather than a daily batch?
+Solution: C. Fraud events that must be checked within seconds
+
+
+Part 4 — OLTP, OLAP, ETL, ELT, and Platform Design
+
+Q. 13 — OLTP or OLAP?
+
+Classify each workload.
+A. Record a new customer order.                                     -> OLTP
+B. Update the payment status of one order.                          -> OLTP
+C. Calculate sales by city for the last 12 months.                  -> OLAP
+D. Compare average order value across product categories.           -> OLAP
+
+Q. 14 — ETL or ELT?
+
+BritMart has two possible designs.                                  
+Design A:
+Extract source data
+Clean it before loading
+Load only cleaned data to the target
+
+Design B:
+Extract source data
+Load the source data to the target platform
+Transform it inside the target
+
+Solution: Design A is ETL and Design B is ELT.
+
+
+Q. 15 — Draw a Small Modern Data Platform
+Use only the concepts covered today.
+
+Your design must show:
+at least 3 source systems
+ingestion
+storage
+processing
+serving
+monitoring
+
+Solution:   1. Web events JSON files | Supplier Excel files | order confirmation free form text file  ---> Ingest semi-structured, structured, unstructured files
+
+            2. Store all the files
+
+            3. Process the files to get clean data
+
+            4. Serving the file to get summary 
+
+            5. Montioring if all the steps ran successfully.
+
+Q. 16 — MCQ: OLAP
+Which workload is an OLAP workload?
+Solution: D. Calculate three years of sales by region
+
+Optional Practice
+
+Q. 17 — Design Recovery for a Failed Batch
+Three daily batches should arrive:
+batch_1 -> received and processed
+batch_2 -> received but processing failed
+batch_3 -> not started
+
+Write the steps you would follow before continuing.
+
+Your answer should include:
+what you would check;                                   -> troubleshooting why the batch_2 failed
+which batch you would rerun;                            -> batch_2
+how you would avoid losing track of the counts.         -> Create a log with information such as error, if succeded then the count of rows with timestamp 
+                                                        -> Next run the batch_3
+                                                        -> Check the status in the log file
+
+Q. 18 — Compare Two Pipeline Designs
+
+Design A
+Source -> Clean -> Final report
+
+Design B
+Source -> Store received data -> Clean -> Final report
+
+Solution: Design B will provide a more cleaner approach because it stores the extracted data and then goes to the cleaning step. If in future the business rules change, it can be re-run from the point whne the data was stored.
+
+Q. 20 — Choose the Processing Style
+For each case, choose batch or streaming and give one reason.
+1. Store sends stock file every evening.                        -> batch, files are sent periodically
+2. Website sends click events all day.                          -> streaming, data should be stored for each click events with no delays
+3. Finance needs a report at the end of each month.             -> batch, monthly reports
+4. Payment team needs alerts within a few seconds.              -> streaming, no scope for delay
+5. Supplier sends one price file every Monday.                  -> batch, weekly run
+
