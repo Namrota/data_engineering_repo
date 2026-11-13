@@ -1,0 +1,28 @@
+
+# Python virtual environments
+dbt-env/
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# dbt generated files
+target/
+dbt_packages/
+logs/
+
+# Environment variables and credentials
+.env
+.env.*
+profiles.yml
+*.p8
+*.pem
+*.key
+
+# VS Code local settings
+.vscode/
