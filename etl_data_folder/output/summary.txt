@@ -1,0 +1,5 @@
+Summary Statistics
+==================
+Total Orders: 3
+Total Revenue: 2016.98
+Most Ordered Product: Mouse
