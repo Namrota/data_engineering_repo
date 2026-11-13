@@ -48,7 +48,7 @@ from pyspark.sql import SparkSession
 
 spark = (
     SparkSession.builder
-    .appName("britmart_foundations")
+    .appName("word_counter")
     .master("local[2]")
     .getOrCreate()
 )
