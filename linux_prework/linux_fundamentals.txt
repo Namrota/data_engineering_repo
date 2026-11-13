@@ -1,0 +1,47 @@
+Part 1 — Meet the Terminal
+
+Q. 1 — Find Your Current User
+Open a Linux terminal and run a command that shows your current username.
+whoami
+
+
+Q. 2 — Find Your Current Location
+Run a command that shows the full path of your current directory.
+pwd
+
+
+Q. 3 — Identify Your Shell
+Run commands that show your login shell and the shell process running in the current terminal.
+echo "$SHELL"
+
+
+Q. 4 — MCQ: Working Directory
+What does pwd show?
+C. The current working directory 
+
+
+Part 2 — Home, Root, and Paths
+
+Q. 5 — Find Your Home Directory
+Show your home directory in two ways:
+I. echo ~
+II. echo "$HOME"
+
+
+Q. 6 — Create and Enter a Safe Practice Folder
+mkdir -p ~/linux_prework/l1_q6
+
+
+Q. 7 — Compare / and /root
+I. ls -ld /
+II. ls -ld $HOME 
+III. ls -ld /root
+
+
+Q. 8 — MCQ: Home Directory
+Which command safely moves you to your own home directory?
+A. cd ~
+
+
+Part 3 — Absolute and Relative Paths
+Q. 9 — Create a Small Folder Structure
