@@ -57,6 +57,9 @@ CREATE TABLE IF NOT EXISTS daily_sales_summary (
 
 SHOW TABLES LIKE 'stg_%';
 
+SELECT * FROM stg_customers;
+SELECT * FROM stg_products;
+
 SELECT 'customers' AS source, COUNT(*) AS row_count
 FROM stg_customers
 WHERE batch_id = '2026-10-23'
