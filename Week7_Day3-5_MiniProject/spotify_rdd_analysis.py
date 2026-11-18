@@ -21,6 +21,7 @@ spark = (
 )
 
 sc= spark.sparkContext
+sc.setLogLevel("ERROR")
 
 file_path= Path("spotify_data.csv").resolve()
 
@@ -46,8 +47,31 @@ print("Test 3:")
 df = spark.read.option("header", True).csv(str(file_path))
 df.show(5, truncate=False)
 
+Issue resolved: Creating RDD directly from CSV file led to Python worker crash when executing take(10)
 
+Reading the CSV file as a DataFrame and converting it to RDD worked.
 
+First 5 rows generated:
+
+Row(acousticness=0.0102, danceability=0.833, duration_ms=204600, energy=0.434, instrumentalness=0.0219, key=2, liveness=0.165, loudness=-8.795, mode=1, speechiness=0.431, tempo=150.062, time_signature=4, valence=0.286, target=1, song_title='Mask Off', artist='Future')
+Row(acousticness=0.199, danceability=0.743, duration_ms=326933, energy=0.359, instrumentalness=0.00611, key=1, liveness=0.137, loudness=-10.401, mode=1, speechiness=0.0794, tempo=160.083, time_signature=4, valence=0.588, target=1, song_title='Redbone', artist='Childish Gambino')
+Row(acousticness=0.0344, danceability=0.838, duration_ms=185707, energy=0.412, instrumentalness=0.000234, key=2, liveness=0.159, loudness=-7.148, mode=1, speechiness=0.289, tempo=75.044, time_signature=4, valence=0.173, target=1, song_title='XannyFamily', artist='Future')
+Row(acousticness=0.604, danceability=0.494, duration_ms=199413, energy=0.338, instrumentalness=0.51, key=5, liveness=0.0922, loudness=-15.236, mode=1, speechiness=0.0261, tempo=86.468, time_signature=4, valence=0.23, target=1, song_title='Master Of None', artist='Beach House')
+Row(acousticness=0.18, danceability=0.678, duration_ms=392893, energy=0.561, instrumentalness=0.512, key=5, liveness=0.439,loudness=-11.648, mode=0, speechiness=0.0694, tempo=174.004, time_signature=4, valence=0.904, target=1, song_title='Parallel Lines', artist='Junior Boys')
 '''
+# Convert the Dataframe to a RDD by using .rdd
+df= (
+    spark.read
+    .option("header", True)
+    .option("inferSchema", True)
+    .csv(str(file_path))
+    )
+
+spotify_rdd= df.rdd
+
+# Display records
+for row in spotify_rdd.take(5):
+    print(row)
+
 
 spark.stop()
