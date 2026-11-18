@@ -89,7 +89,7 @@ Swapping key, value: [(8, 'Future'), (2, 'Childish Gambino'), (6, 'Beach House')
 '''
 swapped_count_songs_rdd= count_songs_rdd.map(lambda x: (x[1], x[0]))
 sort_count_rdd= swapped_count_songs_rdd.sortByKey(False)
-print("Top 5 artists:", sort_count_rdd.take(5))
+#print("Top 5 artists:", sort_count_rdd.take(5))
 '''
 Output:
 Top 5 artists: [(16, 'Drake'),
@@ -104,4 +104,10 @@ Top 5 artists: [(16, 'Drake'),
 
 '''
 
+danceability_rdd= spotify_rdd.map(lambda row: row['danceability'])
+danceability_avg= danceability_rdd.mean()
+'''
+Average danceability across all songs: 0.6184
+'''
+print(f"Average danceability across all songs: {danceability_avg:.4f}")
 spark.stop()
