@@ -24,6 +24,7 @@ sc= spark.sparkContext
 sc.setLogLevel("ERROR")
 
 file_path= Path("spotify_data.csv").resolve()
+file_path_coffee= Path("coffee_sales.csv").resolve()
 
 '''
 Troubleshooting:
@@ -108,6 +109,61 @@ danceability_rdd= spotify_rdd.map(lambda row: row['danceability'])
 danceability_avg= danceability_rdd.mean()
 '''
 Average danceability across all songs: 0.6184
+
 '''
-print(f"Average danceability across all songs: {danceability_avg:.4f}")
+#print(f"Average danceability across all songs: {danceability_avg:.4f}")
+
+
+'''
+Q3. Load coffee_sales.csv into a DataFrame and find the total revenue.
+
+'''
+coffee_df= (
+    spark.read
+    .option("header", True)
+    .option("inferSchema", True)
+    .csv(str(file_path_coffee))
+    )
+
+# Data Validation:
+# Print first 3 rows in tabular format
+# print(coffee_df.show(3))
+'''
++----------+--------------------+---------+-------------------+-----+-------------+
+|      date|            datetime|cash_type|               card|money|  coffee_name|
++----------+--------------------+---------+-------------------+-----+-------------+
+|2024-03-01|2024-03-01 10:15:...|     card|ANON-0000-0000-0001| 38.7|        Latte|
+|2024-03-01|2024-03-01 12:19:...|     card|ANON-0000-0000-0002| 38.7|Hot Chocolate|
+|2024-03-01|2024-03-01 12:20:...|     card|ANON-0000-0000-0002| 38.7|Hot Chocolate|
++----------+--------------------+---------+-------------------+-----+-------------+
+'''
+
+#coffee_df.printSchema()
+'''
+root
+ |-- date: date (nullable = true)
+ |-- datetime: timestamp (nullable = true)
+ |-- cash_type: string (nullable = true)
+ |-- card: string (nullable = true)
+ |-- money: double (nullable = true)
+ |-- coffee_name: string (nullable = true)
+'''
+# Summary of the DataFrame
+coffee_df.describe().show()
+'''
++-------+---------+-------------------+------------------+-----------+
+|summary|cash_type|               card|             money|coffee_name|
++-------+---------+-------------------+------------------+-----------+
+|  count|     3636|               3547|              3636|       3636|
+|   mean|     NULL|               NULL|31.746859185917987|       NULL|
+| stddev|     NULL|               NULL| 4.919925803555432|       NULL|
+|    min|     card|ANON-0000-0000-0001|             18.12|  Americano|
+|    max|     cash|ANON-0000-0000-1316|              40.0|      Latte|
++-------+---------+-------------------+------------------+-----------+
+
+As can be seen there are NULL values in the column `card`.
+
+'''
+
+
 spark.stop()
