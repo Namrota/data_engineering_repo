@@ -32,17 +32,17 @@ print("File exists:", file_path.exists())
 print("File size:", file_path.stat().st_size)
 print("Spark master:", sc.master)
 
-# Test 1: Python-created RDD
+#### Test 1: Python-created RDD
 print("Test 1:")
 print(sc.parallelize(["hello", "spotify"]).take(2))
 
-# Test 2: Read the file using standard Python
+#### Test 2: Read the file using standard Python
 print("Test 2:")
 with open(file_path, "r", encoding="utf-8-sig") as f:
     for _ in range(3):
         print(repr(f.readline()[:200]))
 
-# Test 3: Read the file using Spark DataFrame API
+#### Test 3: Read the file using Spark DataFrame API
 print("Test 3:")
 df = spark.read.option("header", True).csv(str(file_path))
 df.show(5, truncate=False)
@@ -58,6 +58,10 @@ Row(acousticness=0.199, danceability=0.743, duration_ms=326933, energy=0.359, in
 Row(acousticness=0.0344, danceability=0.838, duration_ms=185707, energy=0.412, instrumentalness=0.000234, key=2, liveness=0.159, loudness=-7.148, mode=1, speechiness=0.289, tempo=75.044, time_signature=4, valence=0.173, target=1, song_title='XannyFamily', artist='Future')
 Row(acousticness=0.604, danceability=0.494, duration_ms=199413, energy=0.338, instrumentalness=0.51, key=5, liveness=0.0922, loudness=-15.236, mode=1, speechiness=0.0261, tempo=86.468, time_signature=4, valence=0.23, target=1, song_title='Master Of None', artist='Beach House')
 Row(acousticness=0.18, danceability=0.678, duration_ms=392893, energy=0.561, instrumentalness=0.512, key=5, liveness=0.439,loudness=-11.648, mode=0, speechiness=0.0694, tempo=174.004, time_signature=4, valence=0.904, target=1, song_title='Parallel Lines', artist='Junior Boys')
+
+
+### Q1. Load Spotify_data.csv into an RDD and count the number of songs per artist.
+
 '''
 # Convert the Dataframe to a RDD by using .rdd
 df= (
@@ -69,9 +73,35 @@ df= (
 
 spotify_rdd= df.rdd
 
-# Display records
-for row in spotify_rdd.take(5):
-    print(row)
+# Display records: testing
+#for row in spotify_rdd.take(5):
+#    print(row)
 
+artists_rdd= spotify_rdd.map(lambda row: (row["artist"], 1))
+
+count_songs_rdd= artists_rdd.reduceByKey(lambda a,b: a+b)
+
+'''
+Current data in count_somgs:
+[('Future', 8), ('Childish Gambino', 2), ('Beach House', 6)]
+Swapping key, value: [(8, 'Future'), (2, 'Childish Gambino'), (6, 'Beach House')]
+
+'''
+swapped_count_songs_rdd= count_songs_rdd.map(lambda x: (x[1], x[0]))
+sort_count_rdd= swapped_count_songs_rdd.sortByKey(False)
+print("Top 5 artists:", sort_count_rdd.take(5))
+'''
+Output:
+Top 5 artists: [(16, 'Drake'),
+(13, 'Rick Ross'),
+(12, 'Disclosure'),
+(10, 'Backstreet Boys'),
+(10, 'WALK THE MOON')]
+'''
+
+'''
+### Q2. Using RDD transformations, find the average danceability across all songs.
+
+'''
 
 spark.stop()
