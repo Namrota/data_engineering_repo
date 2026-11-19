@@ -12,7 +12,7 @@ os.environ["PYSPARK_DRIVER_PYTHON"] = python_exe
 # Main entry point for the pyspark session and context
 from pyspark.sql import SparkSession
 from pathlib import Path
-
+from pyspark.sql import functions as F
 # Create a spark session and context
 spark = (
     SparkSession.builder
@@ -23,7 +23,7 @@ spark = (
 sc= spark.sparkContext
 sc.setLogLevel("ERROR")
 
-file_path= Path("spotify_data.csv").resolve()
+file_path_spotify= Path("spotify_data.csv").resolve()
 file_path_coffee= Path("coffee_sales.csv").resolve()
 
 '''
@@ -65,11 +65,17 @@ Row(acousticness=0.18, danceability=0.678, duration_ms=392893, energy=0.561, ins
 
 '''
 # Convert the Dataframe to a RDD by using .rdd
+'''
+In PySpark, .option("inferSchema", "true") tells
+Spark to automatically detect the data types of columns when reading a CSV file,
+instead of treating every column as a string.
+
+'''
 df= (
     spark.read
     .option("header", True)
     .option("inferSchema", True)
-    .csv(str(file_path))
+    .csv(str(file_path_spotify))
     )
 
 spotify_rdd= df.rdd
@@ -149,7 +155,7 @@ root
  |-- coffee_name: string (nullable = true)
 '''
 # Summary of the DataFrame
-coffee_df.describe().show()
+#coffee_df.describe().show()
 '''
 +-------+---------+-------------------+------------------+-----------+
 |summary|cash_type|               card|             money|coffee_name|
@@ -164,6 +170,122 @@ coffee_df.describe().show()
 As can be seen there are NULL values in the column `card`.
 
 '''
+total_revenue= coffee_df.agg(
+    F.sum(
+        F.col("money").cast("decimal(12,2)")
+    ).alias("Total Revenue Generated")
+)
+
+#total_revenue.show()
+
+'''
++-----------------------+
+|Total Revenue Generated|
++-----------------------+
+|              115431.58|
++-----------------------+
 
 
+Q4. Find the number of transactions for each coffee_name using groupBy.
+'''
+
+coffee_name_grouping= (
+    coffee_df
+    .groupBy('coffee_name')
+    .agg(
+        F.sum(coffee_df["money"]
+              .cast("decimal(12,2)")).alias("total_transactions"))
+)
+#coffee_name_grouping.show()
+
+'''
+Output:
+
++-------------------+------------------+
+|        coffee_name|total_transactions|
++-------------------+------------------+
+|           Espresso|           2814.28|
+|Americano with Milk|          25269.12|
+|              Latte|          27866.30|
+|          Americano|          15062.26|
+|      Hot Chocolate|          10172.46|
+|              Cocoa|           8678.16|
+|            Cortado|           7534.86|
+|         Cappuccino|          18034.14|
++-------------------+------------------+
+
+
+Q5. Add a new column for month from the date column, and find total revenue per month.
+'''
+
+coffee_sales_data= coffee_df.withColumn(
+    'months', F.month(coffee_df.date))
+
+grouping_by_month= (
+    coffee_sales_data
+    .groupBy('months')
+    .agg(
+        F.sum(coffee_df["money"]
+              .cast("decimal(12,2)")).alias("total_transactions"))
+)
+
+ordering_by_transactions= grouping_by_month.orderBy(coffee_sales_data.months)
+
+ordering_by_transactions.show()
+
+'''
+Output:
+
++------+------------------+
+|months|total_transactions|
++------+------------------+
+|     1|           6398.86|
+|     2|          13215.48|
+|     3|          17036.64|
+|     4|           6720.56|
+|     5|           9063.42|
+|     6|           7758.76|
+|     7|           6915.94|
+|     8|           7613.84|
+|     9|           9988.64|
+|    10|          13891.16|
+|    11|           8590.54|
+|    12|           8237.74|
++------+------------------+
+
+Q6. In 3-4 lines, explain the difference between an RDD and a DataFrame
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+
+Q7. How many times the songs had ‘love’ in them?
+
+Q8. BrewBeats wants to play some party songs for their 5th Birthday , curate a songs list for them.
+
+
+
+
+'''
 spark.stop()
