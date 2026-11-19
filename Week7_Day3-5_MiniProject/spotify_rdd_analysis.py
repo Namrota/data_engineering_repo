@@ -253,38 +253,12 @@ Output:
 |    12|           8237.74|
 +------+------------------+
 
-Q6. In 3-4 lines, explain the difference between an RDD and a DataFrame
-
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
 
 Q7. How many times the songs had ‘love’ in them?
 
-'''''
+'''
 love_songs= spotify_rdd.filter(lambda row: "love" in row["song_title"].lower()).count()
-print(f"songs with love in them: {love_songs}")
+#print(f"songs with love in them: {love_songs}")
 
 '''
 Output:
@@ -293,10 +267,29 @@ songs with love in them: 88
 
 Q8. BrewBeats wants to play some party songs for their 5th Birthday , curate a songs list for them.
 '''
+anniversary_songs= spotify_rdd.filter(lambda rows: rows["danceability"] >= 0.7 and rows["energy"] >= 0.7)
+for song in anniversary_songs.take(10):
+    print(
+        "| Song_title:", song["song_title"],
+        "| Artist:", song["artist"],
+        "| Danceability:", song["danceability"],
+        "| Energy:", song["energy"]
+    )
 
+'''
+Output:
 
+| Song_title: Donme Dolap - Baris K Edit | Artist: Modern Folk Üçlüsü | Danceability: 0.753 | Energy: 0.748
+| Song_title: C O O L - Radio Edit | Artist: Le Youth | Danceability: 0.735 | Energy: 0.759
+| Song_title: Percolator (Jamie Jones Vault Mix) - mixed | Artist: Cajmere | Danceability: 0.854 | Energy: 0.719
+| Song_title: House of Jealous Lovers | Artist: The Rapture | Danceability: 0.747 | Energy: 0.74
+| Song_title: This Ready Flesh | Artist: TR/ST | Danceability: 0.781 | Energy: 0.795
+| Song_title: Poppin' My Collar | Artist: Three 6 Mafia | Danceability: 0.722 | Energy: 0.823
+| Song_title: 07-Nov | Artist: Beyoncé | Danceability: 0.747 | Energy: 0.705
+| Song_title: Bang That | Artist: Disclosure | Danceability: 0.731 | Energy: 0.852
+| Song_title: Return Of The Mack - C & J Street Mix | Artist: Mark Morrison | Danceability: 0.715 | Energy: 0.833
+| Song_title: Fantastic Man | Artist: William Onyeabor | Danceability: 0.7 | Energy: 0.756
 
-
-
+'''
 
 spark.stop()
