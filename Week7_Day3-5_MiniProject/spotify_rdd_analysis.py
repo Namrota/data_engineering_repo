@@ -231,7 +231,7 @@ grouping_by_month= (
 
 ordering_by_transactions= grouping_by_month.orderBy(coffee_sales_data.months)
 
-ordering_by_transactions.show()
+#ordering_by_transactions.show()
 
 '''
 Output:
@@ -282,10 +282,21 @@ Q6. In 3-4 lines, explain the difference between an RDD and a DataFrame
 
 Q7. How many times the songs had ‘love’ in them?
 
-Q8. BrewBeats wants to play some party songs for their 5th Birthday , curate a songs list for them.
-
-
-
+'''''
+love_songs= spotify_rdd.filter(lambda row: "love" in row["song_title"].lower()).count()
+print(f"songs with love in them: {love_songs}")
 
 '''
+Output:
+songs with love in them: 88
+
+
+Q8. BrewBeats wants to play some party songs for their 5th Birthday , curate a songs list for them.
+'''
+
+
+
+
+
+
 spark.stop()
