@@ -1,0 +1,46 @@
+
+# ==================================
+# Python
+# ==================================
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.venv/
+venv/
+dbt-env/
+spark_env/
+
+# ==================================
+# dbt generated files
+# ==================================
+target/
+dbt_packages/
+logs/
+*.duckdb
+
+# ==================================
+# Environment variables and secrets
+# ==================================
+.env
+.env.*
+!.env.example
+profiles.yml
+*.pem
+*.p8
+*.key
+
+# ==================================
+# IDE / OS
+# ==================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ==================================
+# Spark generated files
+# ==================================
+spark-warehouse/
+metastore_db/
+derby.log
