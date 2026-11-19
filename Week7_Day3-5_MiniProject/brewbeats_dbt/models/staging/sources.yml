@@ -1,0 +1,13 @@
+# The sources.yml file registers that table as a source.
+
+version: 2
+
+sources:
+  - name: bronze
+    database: BREWBEATS_DB   # Snowflake database
+    schema: BRONZE           # Snowflake schema
+
+    tables:
+      - name: raw_coffee_sales   # name used in dbt
+        identifier: RAW_COFFEE_SALES   # Actual Snowflake table name
+        description: "Raw coffee sales ingested into Snowflake"

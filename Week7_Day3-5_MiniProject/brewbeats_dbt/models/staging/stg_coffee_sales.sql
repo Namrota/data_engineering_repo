@@ -1,0 +1,14 @@
+-- Q1. Create a staging model in dbt for coffee_sales.
+
+SELECT
+    DATE AS SALE_DATE,
+    DATETIME AS SALE_TIMESTAMP,
+    LOWER(TRIM(CASH_TYPE)) AS PAYMENT_METHOD,
+    CARD AS CARD_ID,
+    TRIM(COFFEE_NAME) AS COFFEE_NAME,
+    MONEY AS AMOUNT,
+    YEAR(DATE) AS SALE_YEAR,
+    MONTH(DATE) AS SALE_MONTH,
+    HOUR(DATETIME) AS SALE_HOUR
+
+FROM {{ source('bronze', 'raw_coffee_sales') }}
