@@ -1,0 +1,28 @@
+
+version: 2
+
+models:
+  - name: fct_daily_revenue
+    description: "Daily aggregated coffee sales revenue"
+
+    columns:
+      - name: sale_date
+        description: "Date of coffee sales"
+        data_tests:
+          - not_null
+          - unique
+
+      - name: total_revenue_per_day
+        description: "Total revenue for each day"
+        data_tests:
+          - not_null
+
+      - name: total_sales
+        description: "Number of coffee transactions per day"
+        data_tests:
+          - not_null
+
+      - name: avg_sales_val
+        description: "Average revenue"
+        data_tests:
+          - not_null
